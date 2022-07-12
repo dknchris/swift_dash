@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swift_dash/home/home_screen.dart';
+import 'package:swift_dash/providers/theme_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -11,12 +15,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'SwiftDash',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomeScreen(),
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => ThemeProvider(),
+      builder: (context, child) {
+        return MaterialApp(
+          title: 'SwiftDash',
+          theme: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green),
+          ),
+          darkTheme: ThemeData.dark().copyWith(
+            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green),
+          ),
+          themeMode: ThemeProvider.getListener(context).themeMode,
+          debugShowCheckedModeBanner: false,
+          home: const HomeScreen(),
+        );
+      },
     );
   }
 }
